@@ -3,20 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chúc Mừng Sinh Nhật Vợ Cún 🎀</title>
+    <title>Nhật Ký Chúc Mừng Sinh Nhật Vợ Cún 🎀</title>
+    <!-- Thư viện chuyên dụng tạo hiệu ứng vén cong giấy chân thực -->
+    <script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.js"></script>
     <style>
         :root {
             --primary-pink: #f4a0c0;
             --dark-pink: #880e4f;
-            --soft-pink: rgba(252, 228, 236, 0.9);
             --accent-pink: #d4537e;
+            --page-shadow: rgba(0, 0, 0, 0.15);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             min-height: 100vh;
-            background-color: #fdfaf0;
+            background-image: linear-gradient(rgba(255,255,255,0.4), rgba(255,255,255,0.4)), url('Hãy_thêm_các_202604030119.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -25,254 +27,327 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            position: relative;
         }
-
-        .bg-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(3px);
-            z-index: 0;
-        }
-
-        .hand-drawn-sticker {
-            position: fixed;
-            z-index: 2;
-            pointer-events: none;
-            filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.1));
-            animation: float-slow 6s ease-in-out infinite;
-        }
-
-        .doodle-svg {
-            fill: none;
-            stroke: var(--accent-pink);
-            stroke-width: 3;
-            stroke-linecap: round;
-        }
-
-        @keyframes float-slow {
-            0%, 100% { transform: translate(0, 0) rotate(-3deg); }
-            50% { transform: translate(15px, -15px) rotate(3deg); }
-        }
-
-        #app {
-            width: 90%;
-            max-width: 420px;
-            z-index: 10;
-            position: relative;
-        }
-
-        .screen {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            gap: 1.2rem;
-            animation: fadeIn 0.6s ease-out;
-            background: rgba(255, 255, 255, 0.88);
-            padding: 25px;
-            border-radius: 25px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.5);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-        }
-        .active { display: flex; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .heart-btn {
-            width: 90px; height: 90px; border-radius: 50%;
-            background: white; border: 4px solid var(--primary-pink);
-            cursor: pointer; font-size: 45px;
-            display: flex; align-items: center; justify-content: center;
-            animation: pulse 1.5s infinite;
-            box-shadow: 0 8px 15px rgba(244, 160, 192, 0.3);
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        .photo-frame {
-            background: white;
-            padding: 10px 10px 35px 10px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            transform: rotate(-2deg);
-            margin-bottom: 10px;
-            border: 1px solid #eee;
-        }
-        .photo-frame img {
-            width: 220px;
-            height: 220px;
-            object-fit: cover;
-            display: block;
-            border: 1px solid #fafafa;
-        }
-
-        .msg-card {
-            text-align: left;
-            line-height: 1.6;
-            color: #333;
-            font-size: 1.05rem;
-            padding: 10px;
-        }
-
-        .nav-btn {
-            background: var(--primary-pink);
-            border: none;
-            border-radius: 50px;
-            padding: 14px 35px;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 5px 12px rgba(244, 160, 192, 0.5);
-            transition: 0.3s;
-            font-size: 1rem;
-        }
-        .nav-btn:hover { background: var(--accent-pink); transform: scale(1.05); }
 
         #toggle-music {
             position: fixed;
-            top: 15px; right: 15px;
-            z-index: 100;
+            top: 20px; right: 20px;
+            z-index: 1000;
             width: 45px; height: 45px;
             border-radius: 50%;
             background: white;
             border: 2px solid var(--primary-pink);
             cursor: pointer;
             font-size: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
         }
 
-        .candle-row { display: flex; gap: 8px; justify-content: center; }
+        .container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .flip-book {
+            display: none;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+            border-radius: 5px;
+        }
+
+        .page {
+            background-color: white;
+            overflow: hidden;
+            /* Tạo bóng đổ ở gáy sách dày hơn để tăng cảm giác 3D */
+            box-shadow: inset 10px 0 30px rgba(0,0,0,0.05), inset -2px 0 10px rgba(0,0,0,0.02);
+            cursor: grab;
+        }
+
+        .page:active { cursor: grabbing; }
+
+        .page.--cover {
+            background-color: var(--primary-pink);
+            border: 6px solid #fff;
+            color: white;
+        }
+
+        .paper-grid {
+            background-color: #fdfaf0;
+            background-image: linear-gradient(#e0e5eb 1px, transparent 1px),
+                              linear-gradient(90deg, #e0e5eb 1px, transparent 1px);
+            background-size: 25px 25px;
+            position: relative;
+        }
+
+        .paper-grid::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 35px;
+            width: 2px; height: 100%;
+            background-color: #ffc1cc;
+        }
+
+        .page-content {
+            width: 100%; height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 20px 20px 45px;
+            position: relative;
+            text-align: center;
+        }
+
+        .handwritten {
+            font-family: 'Segoe UI', cursive;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .polaroid {
+            background: white;
+            padding: 8px 8px 35px 8px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            transform: rotate(-2deg);
+            margin-bottom: 15px;
+            border: 1px solid #eee;
+        }
+        .polaroid img {
+            width: 210px; height: 210px; object-fit: cover;
+        }
+
+        .candle-row { display: flex; gap: 10px; justify-content: center; margin-bottom: -5px; }
         .flame {
             width: 14px; height: 22px;
             background: radial-gradient(circle at bottom, #fff, #ffeb3b, #ff5722);
             border-radius: 50% 50% 20% 20%;
-            animation: flicker 0.2s infinite alternate;
+            animation: flicker 0.15s infinite alternate;
         }
-        .flame.out { display: none; }
-        @keyframes flicker { 0% { transform: scale(1); } 100% { transform: scale(1.1); } }
-        .stick { width: 12px; height: 35px; border-radius: 4px; }
+        .flame.out { opacity: 0; transform: translateY(-20px); transition: 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
+        @keyframes flicker { 0% { transform: scale(1); } 100% { transform: scale(1.15); opacity: 0.9; } }
+        .stick { width: 12px; height: 38px; border-radius: 4px; }
+
+        canvas#confetti-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999;
+        }
+
+        .drag-hint {
+            position: absolute;
+            bottom: 30px; right: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--accent-pink);
+            padding: 8px 15px; border-radius: 20px;
+            font-size: 13px; font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            animation: move-hint 2s infinite ease-in-out;
+        }
+        @keyframes move-hint {
+            0%, 100% { transform: translateX(0); opacity: 0.5; }
+            50% { transform: translateX(-15px); opacity: 1; }
+        }
     </style>
 </head>
 <body>
 
-<div class="bg-overlay"></div>
-
 <script>
-    // --- KHU VỰC CẤU HÌNH ---
     const CONFIG = {
-        // Tên file ảnh từ screenshot của bạn
-        backgroundImage: 'Xoá_vùng_ở_202604030150.png', 
-        
-        // Tên file nhạc
         musicFile: 'Có Em Đời Bỗng Vui - Chillies (Official Video) - YouTube.mp3',
-        
-        // Ảnh hiển thị trong khung Polaroid (Dùng chung ảnh nền)
         couplePhoto: 'image_6248fb.jpg' 
     };
-
-    // Áp dụng hình nền
-    document.body.style.backgroundImage = `url('${CONFIG.backgroundImage}')`;
 </script>
 
 <button id="toggle-music" onclick="toggleMusic()">🔇</button>
 <audio id="bg-music" loop><source src="" id="music-src" type="audio/mpeg"></audio>
+<canvas id="confetti-canvas"></canvas>
 
-<div id="app">
-    <!-- Màn hình 1 -->
-    <div id="screen-1" class="screen active">
-        <div style="font-size: 80px;">🎀</div>
-        <h1 style="color: var(--dark-pink); margin-top: 10px;">Chào Vợ Cún!</h1>
-        <p style="text-align: center;">Anh có một món quà nhỏ tự tay thiết kế dành tặng em...</p>
-        <button class="heart-btn" onclick="start()">💗</button>
-        <p style="font-size: 0.8rem; color: var(--accent-pink); font-weight: bold;">NHẤN TRÁI TIM ĐỂ MỞ</p>
-    </div>
+<div class="container">
+    <div class="flip-book" id="book">
+        
+        <!-- Trang 0: Bìa -->
+        <div class="page --cover" data-density="hard">
+            <div class="page-content" style="padding-left: 20px;">
+                <div style="font-size: 80px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1));">📔</div>
+                <h1 class="handwritten" style="font-size: 2.2rem; color: white; text-shadow: 2px 2px 5px rgba(0,0,0,0.25); margin: 20px 0;">Nhật Ký<br>Vợ Cún 🎀</h1>
+                <p style="font-style: italic; font-size: 0.95rem; opacity: 0.9; margin-top: 40px; line-height: 1.6;">
+                    Hãy nhấc bổng góc giấy <br> và vén nhẹ sang trái nhé...
+                </p>
+                <div class="drag-hint">Cầm ở đây & Vuốt 👈</div>
+            </div>
+        </div>
 
-    <!-- Màn hình 2 -->
-    <div id="screen-2" class="screen">
-        <div class="photo-frame">
-            <img id="display-photo" src="" alt="Vợ Cún">
-        </div>
-        <div class="msg-card">
-            <h2 style="color: var(--accent-pink); margin-bottom: 10px; border-bottom: 2px dashed #ffc1cc; padding-bottom: 5px;">Happy Birthday! 🎂</h2>
-            <p>Chúc vợ yêu của anh tuổi mới thật rực rỡ, hạnh phúc và luôn nở nụ cười thật tươi nhé. Cảm ơn em vì đã là một phần tuyệt vời nhất trong cuộc đời anh. Yêu em nhiều lắm! 💕</p>
-        </div>
-        <button class="nav-btn" onclick="next(3)">Thổi nến thôi em! 🕯️</button>
-    </div>
+        <div class="page --cover" data-density="hard"><div class="page-content"></div></div>
 
-    <!-- Màn hình 3 -->
-    <div id="screen-3" class="screen">
-        <h2 style="color: var(--dark-pink);">Ước một điều đi nào...</h2>
-        <div style="margin: 30px 0;">
-            <div class="candle-row" id="candles"></div>
-            <div style="font-size: 130px; margin-top: -35px;">🎂</div>
+        <!-- Trang 2: Ảnh -->
+        <div class="page paper-grid">
+            <div class="page-content">
+                <div class="polaroid">
+                    <img id="display-photo" src="" alt="Photo">
+                </div>
+                <h2 class="handwritten" style="color: var(--accent-pink); margin-top: 10px;">Gửi Vợ Yêu...</h2>
+            </div>
         </div>
-        <div id="wish-done" style="display:none; text-align: center; animation: fadeIn 1s;">
-            <h3 style="color: var(--accent-pink);">✨ Mọi ước nguyện sẽ thành hiện thực! ✨</h3>
-            <div style="font-size: 40px; margin-top: 10px;">🎈🎉🍭</div>
+
+        <!-- Trang 3: Lời chúc -->
+        <div class="page paper-grid">
+            <div class="page-content">
+                <div style="font-size: 35px; margin-bottom: 15px;">🌸</div>
+                <p class="handwritten" style="text-align: left; font-size: 1.1rem; padding: 0 10px;">
+                    Chúc mừng sinh nhật Cún! <br><br>
+                    Cảm ơn em đã luôn là nguồn năng lượng tích cực nhất bên cạnh anh. Chúc em tuổi mới luôn rạng rỡ và hạnh phúc nhé! 💕
+                </p>
+                <div class="handwritten" style="text-align: right; width: 100%; margin-top: 30px; font-weight: bold; color: var(--dark-pink); opacity: 0.8;">— Từ Chồng yêu —</div>
+            </div>
         </div>
-        <button class="nav-btn" style="margin-top: 20px;" onclick="location.reload()">Quay lại ban đầu 🔁</button>
+
+        <!-- Trang 4: Quà -->
+        <div class="page paper-grid">
+            <div class="page-content">
+                <h2 class="handwritten" style="color: var(--dark-pink); margin-bottom: 10px;">Mở quà đi nào!</h2>
+                <div id="gift-box" style="font-size: 110px; cursor: pointer; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);" onclick="openGift(this)">🎁</div>
+                <p class="handwritten" style="color: #888; font-size: 0.85rem;">(Gõ nhẹ vào hộp quà)</p>
+            </div>
+        </div>
+
+        <!-- Trang 5: Thổi nến -->
+        <div class="page paper-grid">
+            <div class="page-content">
+                <h2 class="handwritten" style="color: var(--dark-pink); margin-bottom: 20px;">Ước một điều thật đẹp...</h2>
+                <div class="candle-row" id="candle-container"></div>
+                <div style="font-size: 120px; margin-top: -35px; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));">🎂</div>
+                <p class="handwritten" id="wish-msg" style="display: none; color: var(--accent-pink); font-weight: bold; margin-top: 20px; font-size: 1.1rem;">
+                    ✨ Mọi điều tốt lành nhất cho em! ✨
+                </p>
+            </div>
+        </div>
+
+        <div class="page --cover" data-density="hard"><div class="page-content"></div></div>
+        <div class="page --cover" data-density="hard">
+            <div class="page-content" style="padding-left: 20px;">
+                <div style="font-size: 60px;">💖</div>
+                <h2 class="handwritten" style="color: white; margin-top: 15px; font-size: 1.8rem;">Yêu Em Rất Nhiều!</h2>
+            </div>
+        </div>
+
     </div>
 </div>
 
 <script>
+    document.getElementById('music-src').src = CONFIG.musicFile;
+    document.getElementById('display-photo').src = CONFIG.couplePhoto;
     const music = document.getElementById('bg-music');
-    const musicSrc = document.getElementById('music-src');
-    const photo = document.getElementById('display-photo');
+    let isMusicPlayed = false;
 
-    // Load cấu hình
-    musicSrc.src = CONFIG.musicFile;
-    music.load();
-    photo.src = CONFIG.couplePhoto;
+    document.addEventListener('DOMContentLoaded', function() {
+        const bookEl = document.getElementById('book');
+        bookEl.style.display = 'block';
+
+        const pageFlip = new St.PageFlip(bookEl, {
+            width: 330,
+            height: 480,
+            size: "stretch",
+            minWidth: 300,
+            maxWidth: 400,
+            minHeight: 400,
+            maxHeight: 600,
+            maxShadowOpacity: 1.0,  // TĂNG TỐI ĐA BÓNG ĐỔ: Tạo nếp gấp sâu ở mép giấy khi vén
+            showCover: true,
+            mobileScrollSupport: true,
+            usePortrait: true,
+            flippingTime: 1800,      // LÀM CHẬM: Giúp nhìn rõ quá trình tờ giấy uốn cong dần vào trong
+            drawShadow: true,       // Bật vẽ bóng đổ động theo nếp gấp
+            startPage: 0
+        });
+
+        pageFlip.loadFromHTML(document.querySelectorAll('.page'));
+
+        pageFlip.on('flip', (e) => {
+            if (!isMusicPlayed) {
+                music.play().then(() => {
+                    document.getElementById('toggle-music').innerText = '🔊';
+                    isMusicPlayed = true;
+                }).catch(() => {});
+            }
+        });
+
+        initCandles();
+    });
 
     function toggleMusic() {
-        if (music.paused) { music.play(); document.getElementById('toggle-music').innerText = '🔊'; }
+        if (music.paused) { music.play(); document.getElementById('toggle-music').innerText = '🔊'; isMusicPlayed = true; }
         else { music.pause(); document.getElementById('toggle-music').innerText = '🔇'; }
     }
 
-    function start() {
-        music.play().catch(e => console.log("Audio play failed, user must interact"));
-        document.getElementById('toggle-music').innerText = '🔊';
-        next(2);
-    }
-
-    function next(id) {
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById('screen-' + id).classList.add('active');
-        if (id === 3) initCandles();
+    function openGift(el) {
+        el.style.transform = 'scale(1.4) rotate(15deg)';
+        setTimeout(() => {
+            el.innerHTML = '<span style="font-size:80px">🧸🐰🧁</span>'; 
+            launchConfetti();
+        }, 350);
     }
 
     function initCandles() {
-        const container = document.getElementById('candles');
-        container.innerHTML = '';
+        const container = document.getElementById('candle-container');
         let blown = 0;
-        const colors = ['#ff80ab', '#b39ddb', '#81d4fa', '#a5d6a7', '#fff59d'];
-        
+        const colors = ['#ff80ab', '#b39ddb', '#81d4fa', '#a5d6a7', '#ffcc80'];
         for (let i = 0; i < 5; i++) {
-            const c = document.createElement('div');
-            c.style.cursor = 'pointer';
-            c.innerHTML = `<div class="flame" id="flame-${i}"></div><div class="stick" style="background:${colors[i]}"></div>`;
-            c.onclick = () => {
-                const f = document.getElementById('flame-' + i);
+            const wrapper = document.createElement('div');
+            wrapper.style.cursor = 'pointer';
+            wrapper.innerHTML = `<div class="flame" id="flame-${i}"></div><div class="stick" style="background:${colors[i]}"></div>`;
+            wrapper.onclick = (e) => {
+                const f = document.getElementById(`flame-${i}`);
                 if (!f.classList.contains('out')) {
                     f.classList.add('out');
                     blown++;
                     if (blown === 5) {
                         setTimeout(() => {
-                            document.getElementById('wish-done').style.display = 'block';
+                            document.getElementById('wish-msg').style.display = 'block';
+                            launchConfetti(true);
                         }, 500);
                     }
                 }
             };
-            container.appendChild(c);
+            container.appendChild(wrapper);
         }
     }
+
+    const canvas = document.getElementById('confetti-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    window.addEventListener('resize', resize);
+    resize();
+
+    class P {
+        constructor(big) {
+            this.x = Math.random() * canvas.width;
+            this.y = -20;
+            this.r = big ? Math.random() * 10 + 5 : Math.random() * 5 + 2;
+            this.color = ['#f4a0c0', '#d4537e', '#ffd6e7', '#ffffff', '#ffeb3b'][Math.floor(Math.random() * 5)];
+            this.v = { x: (Math.random() - 0.5) * 4, y: Math.random() * 4 + 3 };
+        }
+        update() { this.x += this.v.x; this.y += this.v.y; }
+        draw() { ctx.fillStyle = this.color; ctx.beginPath(); ctx.arc(this.x, this.y, this.r, 0, Math.PI*2); ctx.fill(); }
+    }
+
+    function launchConfetti(intensive = false) {
+        for(let i=0; i<(intensive?120:50); i++) particles.push(new P(intensive));
+        if(particles.length === (intensive?120:50)) loop();
+    }
+
+    function loop() {
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        for(let i=0; i<particles.length; i++) {
+            particles[i].update(); particles[i].draw();
+            if(particles[i].y > canvas.height) { particles.splice(i,1); i--; }
+        }
+        if(particles.length > 0) requestAnimationFrame(loop);
+    }
+    
+    document.body.addEventListener('click', () => {
+        if (!isMusicPlayed && music.paused) toggleMusic();
+    }, {once: true});
 </script>
 </body>
 </html>
