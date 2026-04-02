@@ -20,6 +20,7 @@
         body {
             min-height: 100vh;
             background-color: var(--paper-bg);
+            /* Lưới ô li chuẩn vở viết */
             background-image: 
                 linear-gradient(var(--line-color) 1px, transparent 1px),
                 linear-gradient(90deg, var(--line-color) 1px, transparent 1px);
@@ -37,44 +38,50 @@
         body::before {
             content: "";
             position: fixed;
-            top: 0;
-            left: 45px;
-            width: 2px;
-            height: 100%;
+            top: 0; left: 45px;
+            width: 2px; height: 100%;
             background-color: var(--margin-line);
             z-index: 1;
         }
 
-        /* Sticker trang trí xung quanh */
-        .decoration {
+        /* Sticker mô phỏng từ ảnh người dùng cung cấp */
+        .my-sticker {
             position: fixed;
             pointer-events: none;
             z-index: 2;
-            font-size: 24px;
             user-select: none;
-            animation: float 4s ease-in-out infinite;
+            filter: drop-shadow(3px 3px 2px rgba(0,0,0,0.1));
+            animation: float 5s ease-in-out infinite;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Phong cách sticker có viền trắng như thật */
+        .sticker-content {
+            background: white;
+            padding: 5px;
+            border-radius: 10px;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
         @keyframes float {
             0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-15px) rotate(10deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
         }
 
         #toggle-music {
             position: fixed;
-            top: 20px;
-            right: 20px;
+            top: 20px; right: 20px;
             z-index: 1000;
-            width: 45px;
-            height: 45px;
+            width: 45px; height: 45px;
             border-radius: 50%;
             background: white;
             border: 2px solid var(--primary-pink);
             cursor: pointer;
             font-size: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
@@ -120,7 +127,7 @@
 
         @keyframes pulse {
             0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(244, 160, 192, 0.7); }
-            70% { transform: scale(1.1); box-shadow: 0 0 0 15px rgba(244, 160, 192, 0); }
+            70% { transform: scale(1.1); box-shadow: 0 0 0 20px rgba(244, 160, 192, 0); }
             100% { transform: scale(1); }
         }
 
@@ -128,21 +135,22 @@
             background: white;
             border: 1px solid #eee;
             border-radius: 2px;
-            padding: 30px 20px;
-            box-shadow: 8px 8px 0px rgba(0,0,0,0.05);
+            padding: 35px 25px;
+            box-shadow: 10px 10px 0px rgba(0,0,0,0.05);
             position: relative;
             transform: rotate(-1deg);
             width: 100%;
         }
         
-        .msg-card::before {
-            content: "";
+        /* Băng dính Washi Tape */
+        .washi-tape {
             position: absolute;
             top: -15px; left: 50%;
             transform: translateX(-50%);
-            width: 120px; height: 35px;
-            background: rgba(244, 160, 192, 0.3);
-            border: 1px dashed rgba(244, 160, 192, 0.5);
+            width: 130px; height: 40px;
+            background: rgba(244, 160, 192, 0.5);
+            border: 1px dashed rgba(244, 160, 192, 0.8);
+            z-index: 2;
         }
 
         .cake-container { position: relative; margin-top: 20px; }
@@ -156,51 +164,82 @@
         }
         .flame.out { opacity: 0; animation: smoke 1.2s ease-out forwards; }
 
-        @keyframes flicker {
-            from { transform: scale(1); }
-            to { transform: scale(1.1); }
-        }
+        @keyframes flicker { from { transform: scale(1); } to { transform: scale(1.2); } }
+        @keyframes smoke { 0% { transform: translateY(0); opacity: 0.5; } 100% { transform: translateY(-40px); opacity: 0; } }
 
-        @keyframes smoke {
-            0% { transform: translateY(0); opacity: 0.5; }
-            100% { transform: translateY(-30px); opacity: 0; }
-        }
-
-        .candle-stick { width: 10px; height: 30px; border-radius: 3px; }
+        .candle-stick { width: 10px; height: 35px; border-radius: 4px; }
 
         .nav-btn {
             background: #fff;
             border: 2px solid var(--primary-pink);
-            border-radius: 8px;
-            padding: 12px 25px;
+            border-radius: 12px;
+            padding: 15px 30px;
             font-weight: bold;
             color: var(--dark-pink);
             cursor: pointer;
-            box-shadow: 4px 4px 0px var(--primary-pink);
+            box-shadow: 5px 5px 0px var(--primary-pink);
+            font-family: inherit;
+            transition: 0.2s;
         }
+        .nav-btn:active { transform: translate(3px, 3px); box-shadow: 2px 2px 0px var(--primary-pink); }
 
         .handwritten {
             font-family: 'Segoe UI', cursive;
             color: #2c3e50;
-            line-height: 1.6;
+            line-height: 1.7;
         }
 
-        /* Vẽ thêm các icon nhỏ xung quanh */
-        .sketch-decor {
+        /* Đốm sáng trang trí */
+        .sparkle {
             position: absolute;
-            opacity: 0.6;
+            width: 4px; height: 4px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s infinite;
         }
+        @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; transform: scale(1.5); } }
     </style>
 </head>
 <body>
 
-<!-- Các sticker trang trí cố định -->
-<div class="decoration" style="top: 10%; left: 10%;">⭐</div>
-<div class="decoration" style="top: 15%; right: 15%; animation-delay: 1s;">🌈</div>
-<div class="decoration" style="bottom: 10%; left: 15%; animation-delay: 2s;">🌸</div>
-<div class="decoration" style="bottom: 15%; right: 10%; animation-delay: 0.5s;">🐱</div>
-<div class="decoration" style="top: 40%; left: 5%; animation-delay: 1.5s;">☁️</div>
-<div class="decoration" style="bottom: 40%; right: 5%; animation-delay: 2.5s;">✨</div>
+<!-- Sticker từ các ảnh mẫu của bạn -->
+<!-- Ảnh 1: Gấu dâu & Các cụm hoa -->
+<div class="my-sticker" style="top: 5%; left: 5%;">
+    <div class="sticker-content" style="font-size: 50px;">🧸</div>
+    <div class="handwritten" style="font-size: 12px; background: white; padding: 2px 5px; border-radius: 5px; margin-top: 5px;">Strawberry Bear</div>
+</div>
+
+<div class="my-sticker" style="top: 25%; left: 2%; animation-delay: 1s;">
+    <div class="sticker-content" style="font-size: 30px;">🌸</div>
+</div>
+
+<!-- Ảnh 2: Thỏ hồng & Trái tim -->
+<div class="my-sticker" style="top: 10%; right: 5%; animation-delay: 0.5s;">
+    <div class="sticker-content" style="font-size: 45px;">🐰</div>
+    <div class="handwritten" style="font-size: 12px; background: white; padding: 2px 5px; border-radius: 5px; margin-top: 5px;">Pinky Bunny</div>
+</div>
+
+<div class="my-sticker" style="top: 40%; right: 3%; animation-delay: 2s;">
+    <div class="sticker-content" style="font-size: 25px;">💖</div>
+</div>
+
+<!-- Ảnh 3: Mèo & Phụ kiện -->
+<div class="my-sticker" style="bottom: 5%; left: 5%; animation-delay: 1.5s;">
+    <div class="sticker-content" style="font-size: 50px;">🐱</div>
+    <div class="handwritten" style="font-size: 12px; background: white; padding: 2px 5px; border-radius: 5px; margin-top: 5px;">Sweet Kitty</div>
+</div>
+
+<div class="my-sticker" style="bottom: 25%; left: 8%; animation-delay: 3s;">
+    <div class="sticker-content" style="font-size: 30px;">🍓</div>
+</div>
+
+<div class="my-sticker" style="bottom: 10%; right: 8%; animation-delay: 0.2s;">
+    <div class="sticker-content" style="font-size: 40px;">🎁</div>
+</div>
+
+<div class="my-sticker" style="top: 45%; left: 45%; opacity: 0.4;">
+    <div style="font-size: 20px;">✨</div>
+</div>
 
 <button id="toggle-music" onclick="toggleMusic()">🔇</button>
 
@@ -211,50 +250,59 @@
 <canvas id="confetti-canvas"></canvas>
 
 <div id="app">
-    <!-- Màn 1 -->
+    <!-- Màn 1: Mở đầu lãng mạn -->
     <div id="screen-lock" class="screen active">
-        <div style="font-size: 60px; margin-bottom: 10px;">📔</div>
-        <h1 class="handwritten" style="color: var(--dark-pink); font-size: 1.6rem;">Gửi Vợ Cún 🎀</h1>
-        <p class="handwritten" style="font-style: italic; color: #555;">Chạm vào trái tim để mở món quà này nhé!</p>
-        <div style="height: 30px;"></div>
+        <div style="font-size: 80px; margin-bottom: 10px; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1));">📔</div>
+        <h1 class="handwritten" style="color: var(--dark-pink); font-size: 1.8rem;">Gửi Vợ Cún Của Anh 🎀</h1>
+        <p class="handwritten" style="font-style: italic; color: #555; max-width: 320px; background: rgba(255,255,255,0.6); padding: 10px; border-radius: 10px;">Một cuốn nhật ký nhỏ chứa đựng bao nhiêu tình cảm anh dành cho em...</p>
+        <div style="height: 20px;"></div>
         <button class="heart-btn" onclick="startApp()">💖</button>
+        <p class="handwritten" style="color: var(--accent-pink); margin-top: 15px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Nhấn để mở và phát nhạc ✨</p>
     </div>
 
-    <!-- Màn 2 -->
+    <!-- Màn 2: Mở hộp quà -->
     <div id="screen-gift" class="screen">
-        <h2 class="handwritten" style="color: var(--dark-pink);">Có gì ở đây nhỉ?</h2>
-        <div style="font-size: 120px; cursor: pointer;" onclick="openGift()" id="gift-box">🎁</div>
-        <p class="handwritten" style="color: #666;">Nhấn để mở quà!</p>
+        <h2 class="handwritten" style="color: var(--dark-pink); font-size: 1.5rem;">Cún mở quà đi nè! 🧸</h2>
+        <div style="font-size: 140px; cursor: pointer; transition: 0.3s; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1));" onclick="openGift()" id="gift-box">🎁</div>
+        <p class="handwritten" style="color: #666; font-weight: 500;">Chạm vào hộp quà để khám phá!</p>
     </div>
 
-    <!-- Màn 3 -->
+    <!-- Màn 3: Tấm thiệp chúc mừng -->
     <div id="screen-msg" class="screen">
         <div class="msg-card handwritten">
-            <h2 style="color: var(--accent-pink); margin-bottom: 15px; border-bottom: 1px dashed #f4a0c0; padding-bottom: 5px;">Happy Birthday Vợ Cún! 🎂</h2>
-            <p style="text-align: left; font-size: 1.05rem;">
-                Chúc mừng sinh nhật cô gái tuyệt vời nhất của anh! <br><br>
-                Chúc <b>Vợ Cún</b> luôn ngập tràn niềm vui, xinh đẹp và hạnh phúc bên anh nhé. Anh sẽ luôn ở đây ủng hộ mọi ước mơ của em. <br><br>
-                Yêu em rất nhiều! 💕
+            <div class="washi-tape"></div>
+            <div style="position: absolute; top: 10px; left: 10px; font-size: 25px;">🌸</div>
+            <div style="position: absolute; top: 10px; right: 10px; font-size: 25px;">🎀</div>
+            
+            <h2 style="color: var(--accent-pink); margin-bottom: 20px; border-bottom: 2px dashed #f4a0c0; padding-bottom: 10px; font-size: 1.5rem;">Happy Birthday Vợ Cún! 🎂</h2>
+            
+            <p style="text-align: left; font-size: 1.15rem; color: #333; font-weight: 400;">
+                Hôm nay là một ngày thật đặc biệt, ngày mà "Vợ Cún" của anh ra đời! <br><br>
+                Chúc em tuổi mới luôn xinh đẹp, rạng rỡ và luôn cảm thấy hạnh phúc khi ở bên anh. Anh sẽ cố gắng hết sức để mỗi ngày của em đều vui vẻ như hôm nay. <br><br>
+                Mọi dự định sắp tới của em chắc chắn sẽ thành công rực rỡ. Yêu em rất nhiều! 💕
             </p>
-            <div style="text-align: right; margin-top: 20px; font-weight: bold; color: var(--accent-pink);">— Từ Chồng của em —</div>
+            
+            <div style="text-align: right; margin-top: 30px; font-weight: bold; color: var(--accent-pink); font-size: 1.3rem;">— Từ Chồng yêu của em —</div>
+            <div style="position: absolute; bottom: -15px; left: -15px; font-size: 40px; transform: rotate(-15deg);">🧸</div>
         </div>
-        <button class="nav-btn handwritten" onclick="goTo('game')">Qua đây thổi nến nào! 🕯️</button>
+        <button class="nav-btn handwritten" onclick="goTo('game')">Qua thổi nến sinh nhật nha! 🕯️</button>
     </div>
 
-    <!-- Màn 4 -->
+    <!-- Màn 4: Thổi nến -->
     <div id="screen-game" class="screen">
-        <h2 class="handwritten" style="color: var(--dark-pink);">Ước một điều thật đẹp nha...</h2>
+        <h2 class="handwritten" style="color: var(--dark-pink); font-size: 1.5rem;">Cún ước một điều thật đẹp nha...</h2>
         <div class="cake-container">
             <div class="candle-row" id="candle-row"></div>
-            <div style="font-size: 100px; margin-top: -20px;">🎂</div>
+            <div style="font-size: 120px; margin-top: -30px; filter: drop-shadow(0 8px 15px rgba(0,0,0,0.1));">🎂</div>
         </div>
         <div id="blown-msg" style="display:none;">
-            <p class="handwritten" style="color: var(--accent-pink); font-weight: bold; font-size: 1.3rem; margin-top: 15px;">
+            <p class="handwritten" style="color: var(--accent-pink); font-weight: bold; font-size: 1.5rem; margin-top: 25px; animation: fadeIn 1s forwards;">
                 ✨ Mọi điều ước sẽ thành hiện thực! ✨
             </p>
-            <div style="font-size: 40px; margin-top: 10px;">🎉🍭🎁</div>
+            <div style="font-size: 50px; margin-top: 15px; animation: pulse 1s infinite;">🎉🍭🎈🎁</div>
+            <p class="handwritten" style="color: #666; margin-top: 10px;">Chúc mừng sinh nhật, Cún yêu dấu!</p>
         </div>
-        <button class="nav-btn handwritten" style="margin-top: 25px;" onclick="resetCandles()">Thổi lại 🔁</button>
+        <button class="nav-btn handwritten" style="margin-top: 35px;" onclick="resetCandles()">Thổi lại lần nữa 🔁</button>
     </div>
 </div>
 
@@ -278,9 +326,11 @@
     }
 
     function startApp() {
-        // Nhạc bắt đầu khi nhấn nút đầu tiên
-        music.play();
-        musicBtn.innerText = '🔊';
+        // Tự động phát nhạc ngay khi nhấn
+        music.play().then(() => {
+            musicBtn.innerText = '🔊';
+        }).catch(e => console.log("Cần tương tác người dùng"));
+        
         goTo('gift');
         createFloatingHearts();
     }
@@ -293,7 +343,7 @@
 
     function openGift() {
         const gift = document.getElementById('gift-box');
-        gift.style.transform = 'scale(1.5) rotate(20deg)';
+        gift.style.transform = 'scale(1.5) rotate(15deg)';
         setTimeout(() => {
             gift.innerText = '🎈';
             launchConfetti();
@@ -311,6 +361,7 @@
         for (let i = 0; i < 5; i++) {
             const c = document.createElement('div');
             c.className = 'candle-item';
+            c.style.cursor = 'pointer';
             c.innerHTML = `
                 <div class="flame" id="flame-${i}"></div>
                 <div class="candle-stick" style="background:${colors[i]}"></div>
@@ -338,23 +389,25 @@
         setInterval(() => {
             if (document.getElementById('screen-lock').classList.contains('active')) return;
             const heart = document.createElement('div');
-            heart.innerHTML = ['❤️', '💖', '✨', '🌸'][Math.floor(Math.random() * 4)];
+            // Các icon mô phỏng sticker của bạn
+            heart.innerHTML = ['❤️', '💖', '✨', '🌸', '🧸', '🐰', '🐱', '🍓'][Math.floor(Math.random() * 8)];
             heart.style.position = 'fixed';
             heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.bottom = '-5vh';
-            heart.style.fontSize = Math.random() * 20 + 10 + 'px';
+            heart.style.bottom = '-10vh';
+            heart.style.fontSize = Math.random() * 25 + 15 + 'px';
             heart.style.zIndex = '1';
-            heart.style.transition = 'all 4s linear';
+            heart.style.opacity = '0.7';
+            heart.style.transition = 'all 6s linear';
             document.body.appendChild(heart);
             
             setTimeout(() => {
-                heart.style.bottom = '105vh';
+                heart.style.bottom = '110vh';
                 heart.style.opacity = '0';
-                heart.style.transform = `translateX(${(Math.random() - 0.5) * 100}px)`;
+                heart.style.transform = `translateX(${(Math.random() - 0.5) * 200}px) rotate(${Math.random() * 360}deg)`;
             }, 50);
             
-            setTimeout(() => heart.remove(), 4000);
-        }, 600);
+            setTimeout(() => heart.remove(), 6000);
+        }, 800);
     }
 
     // Canvas Confetti
@@ -366,11 +419,11 @@
         constructor(isBig) {
             this.x = Math.random() * canvas.width;
             this.y = Math.random() * canvas.height - canvas.height;
-            this.r = isBig ? (Math.random() * 10 + 5) : (Math.random() * 6 + 2);
-            this.color = ['#f4a0c0', '#d4537e', '#ffd6e7', '#a5d6a7', '#81d4fa'][Math.floor(Math.random() * 5)];
-            this.velocity = { x: (Math.random() - 0.5) * 4, y: isBig ? (Math.random() * 6 + 6) : (Math.random() * 4 + 2) };
+            this.r = isBig ? (Math.random() * 14 + 7) : (Math.random() * 8 + 3);
+            this.color = ['#f4a0c0', '#d4537e', '#ffd6e7', '#a5d6a7', '#81d4fa', '#ffeb3b', '#ffffff'][Math.floor(Math.random() * 7)];
+            this.velocity = { x: (Math.random() - 0.5) * 6, y: isBig ? (Math.random() * 8 + 8) : (Math.random() * 6 + 4) };
             this.rotation = Math.random() * 360;
-            this.rotationSpeed = Math.random() * 10;
+            this.rotationSpeed = Math.random() * 20;
         }
         draw() {
             ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.rotation * Math.PI / 180);
@@ -380,7 +433,7 @@
     }
 
     function launchConfetti(intensive = false) {
-        for (let i = 0; i < (intensive ? 120 : 60); i++) particles.push(new Particle(intensive));
+        for (let i = 0; i < (intensive ? 180 : 80); i++) particles.push(new Particle(intensive));
         if (!confettiActive) { confettiActive = true; animateConfetti(); }
     }
 
