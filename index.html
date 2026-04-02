@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday Vợ Cún 🎀</title>
+    <title>Chúc Mừng Sinh Nhật Vợ Cún 🎀</title>
     <style>
         :root {
             --primary-pink: #f4a0c0;
             --dark-pink: #880e4f;
             --soft-pink: #fce4ec;
             --accent-pink: #d4537e;
-            --paper-bg: #fdfaf0; /* Màu giấy vintage */
-            --line-color: #e0e5eb; /* Màu ô li */
-            --margin-line: #ffc1cc; /* Màu đường lề */
+            --paper-bg: #fdfaf0; 
+            --line-color: #e0e5eb; 
+            --margin-line: #ffc1cc; 
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -33,19 +33,33 @@
             position: relative;
         }
 
-        /* Hiệu ứng đường lề vở */
+        /* Đường lề đỏ */
         body::before {
             content: "";
             position: fixed;
             top: 0;
-            left: 40px;
+            left: 45px;
             width: 2px;
             height: 100%;
             background-color: var(--margin-line);
             z-index: 1;
         }
 
-        /* Nút điều khiển */
+        /* Sticker trang trí xung quanh */
+        .decoration {
+            position: fixed;
+            pointer-events: none;
+            z-index: 2;
+            font-size: 24px;
+            user-select: none;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(10deg); }
+        }
+
         #toggle-music {
             position: fixed;
             top: 20px;
@@ -58,36 +72,19 @@
             border: 2px solid var(--primary-pink);
             cursor: pointer;
             font-size: 20px;
-            box-shadow: 0 4px 10px rgba(244, 160, 192, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        #back-btn {
-            position: fixed;
-            top: 20px;
-            left: 60px;
-            z-index: 1000;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: white;
-            border: 2px solid var(--primary-pink);
-            cursor: pointer;
-            font-size: 20px;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            color: var(--dark-pink);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
         #app {
             width: 100%;
-            max-width: 480px;
-            padding: 2rem;
+            max-width: 450px;
+            padding: 20px;
             text-align: center;
             z-index: 10;
+            position: relative;
         }
 
         canvas#confetti-canvas {
@@ -98,7 +95,6 @@
             z-index: 5;
         }
 
-        /* Màn hình */
         .screen {
             display: none;
             flex-direction: column;
@@ -109,107 +105,105 @@
         .active { display: flex; }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
         }
 
-        /* Nút trái tim */
         .heart-btn {
-            width: 100px; height: 100px; border-radius: 50%;
+            width: 90px; height: 90px; border-radius: 50%;
             background: #ffd6e7; border: 3px solid var(--primary-pink);
-            cursor: pointer; font-size: 45px;
+            cursor: pointer; font-size: 40px;
             display: flex; align-items: center; justify-content: center;
             animation: pulse 1.6s ease-in-out infinite;
             outline: none;
         }
 
         @keyframes pulse {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(244, 160, 192, 0.5); }
-            50% { transform: scale(1.1); box-shadow: 0 0 0 20px rgba(244, 160, 192, 0); }
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(244, 160, 192, 0.7); }
+            70% { transform: scale(1.1); box-shadow: 0 0 0 15px rgba(244, 160, 192, 0); }
+            100% { transform: scale(1); }
         }
 
-        /* Thẻ lời chúc */
         .msg-card {
             background: white;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 2.5rem 1.5rem;
-            box-shadow: 5px 5px 15px rgba(0,0,0,0.05);
+            border: 1px solid #eee;
+            border-radius: 2px;
+            padding: 30px 20px;
+            box-shadow: 8px 8px 0px rgba(0,0,0,0.05);
             position: relative;
             transform: rotate(-1deg);
+            width: 100%;
         }
         
         .msg-card::before {
             content: "";
             position: absolute;
-            top: -10px;
-            left: 50%;
+            top: -15px; left: 50%;
             transform: translateX(-50%);
-            width: 100px;
-            height: 30px;
-            background: rgba(244, 160, 192, 0.4);
+            width: 120px; height: 35px;
+            background: rgba(244, 160, 192, 0.3);
+            border: 1px dashed rgba(244, 160, 192, 0.5);
         }
 
-        /* Bánh sinh nhật và nến */
-        .cake-container {
-            position: relative;
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .candle-row { display: flex; gap: 15px; margin-bottom: -5px; height: 50px; align-items: flex-end; }
-        .candle-item { cursor: pointer; transition: transform 0.2s; }
-        
+        .cake-container { position: relative; margin-top: 20px; }
+        .candle-row { display: flex; gap: 12px; justify-content: center; margin-bottom: -10px; }
         .flame {
-            width: 12px; height: 20px;
-            background: radial-gradient(circle at bottom, #ffeb3b, #ff9800, #f44336);
+            width: 12px; height: 18px;
+            background: radial-gradient(circle at bottom, #fff700, #ff9800, #ff5722);
             border-radius: 50% 50% 20% 20%;
             margin: 0 auto;
             animation: flicker 0.6s infinite alternate;
         }
-        .flame.out { 
-            opacity: 0; 
-            animation: smoke 1s ease-out forwards; 
-        }
+        .flame.out { opacity: 0; animation: smoke 1.2s ease-out forwards; }
 
         @keyframes flicker {
-            0% { transform: scale(1) rotate(-2deg); }
-            100% { transform: scale(1.1) rotate(2deg); opacity: 0.9; }
-        }
-        @keyframes smoke {
-            0% { transform: translateY(0) scale(1); opacity: 0.5; }
-            100% { transform: translateY(-20px) scale(1.5); opacity: 0; }
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
         }
 
-        .candle-stick { width: 10px; height: 35px; border-radius: 4px; background: #81d4fa; }
+        @keyframes smoke {
+            0% { transform: translateY(0); opacity: 0.5; }
+            100% { transform: translateY(-30px); opacity: 0; }
+        }
+
+        .candle-stick { width: 10px; height: 30px; border-radius: 3px; }
 
         .nav-btn {
             background: #fff;
             border: 2px solid var(--primary-pink);
-            border-radius: 10px;
-            padding: 10px 24px;
-            font-weight: 600;
+            border-radius: 8px;
+            padding: 12px 25px;
+            font-weight: bold;
             color: var(--dark-pink);
             cursor: pointer;
-            box-shadow: 3px 3px 0px var(--primary-pink);
+            box-shadow: 4px 4px 0px var(--primary-pink);
         }
 
-        .gift-box { font-size: 100px; cursor: pointer; transition: transform 0.3s; }
-        .gift-box:hover { transform: scale(1.1); }
+        .handwritten {
+            font-family: 'Segoe UI', cursive;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
 
-        h1, h2 {
-            font-family: 'Comic Sans MS', cursive;
-            margin-bottom: 0.5rem;
+        /* Vẽ thêm các icon nhỏ xung quanh */
+        .sketch-decor {
+            position: absolute;
+            opacity: 0.6;
         }
     </style>
 </head>
 <body>
 
-<button id="back-btn" onclick="goBack()">⬅️</button>
-<button id="toggle-music" onclick="toggleMusic()">🔊</button>
+<!-- Các sticker trang trí cố định -->
+<div class="decoration" style="top: 10%; left: 10%;">⭐</div>
+<div class="decoration" style="top: 15%; right: 15%; animation-delay: 1s;">🌈</div>
+<div class="decoration" style="bottom: 10%; left: 15%; animation-delay: 2s;">🌸</div>
+<div class="decoration" style="bottom: 15%; right: 10%; animation-delay: 0.5s;">🐱</div>
+<div class="decoration" style="top: 40%; left: 5%; animation-delay: 1.5s;">☁️</div>
+<div class="decoration" style="bottom: 40%; right: 5%; animation-delay: 2.5s;">✨</div>
 
-<!-- TRÌNH PHÁT NHẠC: Ưu tiên file bạn tải lên -->
+<button id="toggle-music" onclick="toggleMusic()">🔇</button>
+
 <audio id="bg-music" loop preload="auto">
     <source src="Có Em Đời Bỗng Vui - Chillies (Official Video) - YouTube.mp3" type="audio/mpeg">
 </audio>
@@ -217,70 +211,61 @@
 <canvas id="confetti-canvas"></canvas>
 
 <div id="app">
-    <!-- Màn 1: Khóa/Mở đầu -->
+    <!-- Màn 1 -->
     <div id="screen-lock" class="screen active">
-        <div style="font-size: 24px;">🖍️ ✨ 🎀</div>
-        <h1 style="color: var(--dark-pink); font-size: 1.5rem;">Vợ Cún ơi, lật trang này xem...</h1>
+        <div style="font-size: 60px; margin-bottom: 10px;">📔</div>
+        <h1 class="handwritten" style="color: var(--dark-pink); font-size: 1.6rem;">Gửi Vợ Cún 🎀</h1>
+        <p class="handwritten" style="font-style: italic; color: #555;">Chạm vào trái tim để mở món quà này nhé!</p>
+        <div style="height: 30px;"></div>
         <button class="heart-btn" onclick="startApp()">💖</button>
-        <p style="color: var(--accent-pink); font-weight: 500; font-style: italic;">Chạm vào trái tim để mở vở và nghe nhạc</p>
     </div>
 
-    <!-- Màn 2: Hộp quà -->
+    <!-- Màn 2 -->
     <div id="screen-gift" class="screen">
-        <h2 style="color: var(--dark-pink);">Quà vẽ trong vở nè...</h2>
-        <div class="gift-box" onclick="openGift()">🎁</div>
-        <p style="color: #666; font-style: italic;">Mở ra xem có gì nào!</p>
+        <h2 class="handwritten" style="color: var(--dark-pink);">Có gì ở đây nhỉ?</h2>
+        <div style="font-size: 120px; cursor: pointer;" onclick="openGift()" id="gift-box">🎁</div>
+        <p class="handwritten" style="color: #666;">Nhấn để mở quà!</p>
     </div>
 
-    <!-- Màn 3: Lời chúc -->
+    <!-- Màn 3 -->
     <div id="screen-msg" class="screen">
-        <div class="msg-card">
-            <h2 style="color: var(--accent-pink); margin-bottom: 1rem;">Gửi Vợ Cún 🌸</h2>
-            <p style="color: #444; line-height: 1.8; font-size: 1.1rem; text-align: left;">
-                Hôm nay là một ngày cực kỳ đặc biệt! <br>
-                Chúc <b>Cún</b> của anh luôn đáng yêu như những nét vẽ này, học tập tốt và lúc nào cũng là cô gái hạnh phúc nhất quả đất. Yêu em! 💕
+        <div class="msg-card handwritten">
+            <h2 style="color: var(--accent-pink); margin-bottom: 15px; border-bottom: 1px dashed #f4a0c0; padding-bottom: 5px;">Happy Birthday Vợ Cún! 🎂</h2>
+            <p style="text-align: left; font-size: 1.05rem;">
+                Chúc mừng sinh nhật cô gái tuyệt vời nhất của anh! <br><br>
+                Chúc <b>Vợ Cún</b> luôn ngập tràn niềm vui, xinh đẹp và hạnh phúc bên anh nhé. Anh sẽ luôn ở đây ủng hộ mọi ước mơ của em. <br><br>
+                Yêu em rất nhiều! 💕
             </p>
-            <div style="text-align: right; margin-top: 15px; font-weight: bold; color: var(--primary-pink);">— Từ Chồng của em —</div>
+            <div style="text-align: right; margin-top: 20px; font-weight: bold; color: var(--accent-pink);">— Từ Chồng của em —</div>
         </div>
-        <button class="nav-btn" onclick="goTo('game')">Thổi nến thôi! 🎂</button>
+        <button class="nav-btn handwritten" onclick="goTo('game')">Qua đây thổi nến nào! 🕯️</button>
     </div>
 
-    <!-- Màn 4: Thổi nến -->
+    <!-- Màn 4 -->
     <div id="screen-game" class="screen">
-        <h2 style="color: var(--dark-pink);">Ước một điều thật đẹp nhé... 🕯️</h2>
+        <h2 class="handwritten" style="color: var(--dark-pink);">Ước một điều thật đẹp nha...</h2>
         <div class="cake-container">
             <div class="candle-row" id="candle-row"></div>
-            <div style="font-size: 80px; margin-top: -10px;">🎂</div>
+            <div style="font-size: 100px; margin-top: -20px;">🎂</div>
         </div>
         <div id="blown-msg" style="display:none;">
-            <p style="color: var(--accent-pink); font-weight: bold; font-size: 1.2rem; margin-top: 1rem;">
-                ✨ Chúc mọi dự định của Cún đều thành công rực rỡ! ✨
+            <p class="handwritten" style="color: var(--accent-pink); font-weight: bold; font-size: 1.3rem; margin-top: 15px;">
+                ✨ Mọi điều ước sẽ thành hiện thực! ✨
             </p>
+            <div style="font-size: 40px; margin-top: 10px;">🎉🍭🎁</div>
         </div>
-        <button class="nav-btn" style="margin-top: 20px;" onclick="resetCandles()">Làm lại điều ước 🔁</button>
+        <button class="nav-btn handwritten" style="margin-top: 25px;" onclick="resetCandles()">Thổi lại 🔁</button>
     </div>
 </div>
 
 <script>
     const music = document.getElementById('bg-music');
     const musicBtn = document.getElementById('toggle-music');
-    const backBtn = document.getElementById('back-btn');
     const canvas = document.getElementById('confetti-canvas');
     const ctx = canvas.getContext('2d');
     
     let confettiActive = false;
     let particles = [];
-    let screenHistory = ['lock'];
-
-    // Phát nhạc sau tương tác người dùng
-    async function playMusic() {
-        try {
-            await music.play();
-            musicBtn.innerText = '🔊';
-        } catch (err) {
-            musicBtn.innerText = '🔇';
-        }
-    }
 
     function toggleMusic() {
         if (music.paused) {
@@ -293,28 +278,27 @@
     }
 
     function startApp() {
-        playMusic();
+        // Nhạc bắt đầu khi nhấn nút đầu tiên
+        music.play();
+        musicBtn.innerText = '🔊';
         goTo('gift');
+        createFloatingHearts();
     }
 
-    function goTo(screenId, isBack = false) {
+    function goTo(screenId) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById('screen-' + screenId).classList.add('active');
-        if (!isBack && screenHistory[screenHistory.length - 1] !== screenId) screenHistory.push(screenId);
-        backBtn.style.display = screenId === 'lock' ? 'none' : 'flex';
         if (screenId === 'game') buildCandles();
     }
 
-    function goBack() {
-        if (screenHistory.length > 1) {
-            screenHistory.pop();
-            goTo(screenHistory[screenHistory.length - 1], true);
-        }
-    }
-
     function openGift() {
-        launchConfetti();
-        setTimeout(() => goTo('msg'), 1000);
+        const gift = document.getElementById('gift-box');
+        gift.style.transform = 'scale(1.5) rotate(20deg)';
+        setTimeout(() => {
+            gift.innerText = '🎈';
+            launchConfetti();
+            setTimeout(() => goTo('msg'), 800);
+        }, 300);
     }
 
     function buildCandles() {
@@ -322,16 +306,21 @@
         row.innerHTML = '';
         document.getElementById('blown-msg').style.display = 'none';
         const colors = ['#ff80ab', '#b39ddb', '#81d4fa', '#a5d6a7', '#ffcc80'];
-        let blown = 0;
+        let blownCount = 0;
+        
         for (let i = 0; i < 5; i++) {
             const c = document.createElement('div');
             c.className = 'candle-item';
-            c.innerHTML = `<div class="flame" id="flame-${i}"></div><div class="candle-stick" style="background:${colors[i]}"></div>`;
+            c.innerHTML = `
+                <div class="flame" id="flame-${i}"></div>
+                <div class="candle-stick" style="background:${colors[i]}"></div>
+            `;
             c.onclick = () => {
                 const f = document.getElementById('flame-' + i);
                 if (!f.classList.contains('out')) {
                     f.classList.add('out');
-                    if (++blown === 5) {
+                    blownCount++;
+                    if (blownCount === 5) {
                         setTimeout(() => {
                             document.getElementById('blown-msg').style.display = 'block';
                             launchConfetti(true);
@@ -345,7 +334,30 @@
 
     function resetCandles() { buildCandles(); }
 
-    // Logic Pháo hoa
+    function createFloatingHearts() {
+        setInterval(() => {
+            if (document.getElementById('screen-lock').classList.contains('active')) return;
+            const heart = document.createElement('div');
+            heart.innerHTML = ['❤️', '💖', '✨', '🌸'][Math.floor(Math.random() * 4)];
+            heart.style.position = 'fixed';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.bottom = '-5vh';
+            heart.style.fontSize = Math.random() * 20 + 10 + 'px';
+            heart.style.zIndex = '1';
+            heart.style.transition = 'all 4s linear';
+            document.body.appendChild(heart);
+            
+            setTimeout(() => {
+                heart.style.bottom = '105vh';
+                heart.style.opacity = '0';
+                heart.style.transform = `translateX(${(Math.random() - 0.5) * 100}px)`;
+            }, 50);
+            
+            setTimeout(() => heart.remove(), 4000);
+        }, 600);
+    }
+
+    // Canvas Confetti
     function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
@@ -356,7 +368,7 @@
             this.y = Math.random() * canvas.height - canvas.height;
             this.r = isBig ? (Math.random() * 10 + 5) : (Math.random() * 6 + 2);
             this.color = ['#f4a0c0', '#d4537e', '#ffd6e7', '#a5d6a7', '#81d4fa'][Math.floor(Math.random() * 5)];
-            this.velocity = { x: (Math.random() - 0.5) * 3, y: isBig ? (Math.random() * 5 + 5) : (Math.random() * 3 + 2) };
+            this.velocity = { x: (Math.random() - 0.5) * 4, y: isBig ? (Math.random() * 6 + 6) : (Math.random() * 4 + 2) };
             this.rotation = Math.random() * 360;
             this.rotationSpeed = Math.random() * 10;
         }
@@ -368,7 +380,7 @@
     }
 
     function launchConfetti(intensive = false) {
-        for (let i = 0; i < (intensive ? 150 : 80); i++) particles.push(new Particle(intensive));
+        for (let i = 0; i < (intensive ? 120 : 60); i++) particles.push(new Particle(intensive));
         if (!confettiActive) { confettiActive = true; animateConfetti(); }
     }
 
