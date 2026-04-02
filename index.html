@@ -12,13 +12,16 @@
             --dark-pink: #880e4f;
             --accent-pink: #d4537e;
             --page-shadow: rgba(0, 0, 0, 0.15);
+            /* Biến lưu trữ đường dẫn ảnh nền từ CONFIG */
+            --bg-url: url('Hãy_thêm_các_202604030119.jpg');
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             min-height: 100vh;
-            background-image: linear-gradient(rgba(255,255,255,0.4), rgba(255,255,255,0.4)), url('Hãy_thêm_các_202604030119.jpg');
+            /* Sử dụng ảnh nền từ biến CSS */
+            background-image: linear-gradient(rgba(255,255,255,0.4), rgba(255,255,255,0.4)), var(--bg-url);
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -151,10 +154,23 @@
 <body>
 
 <script>
+    /**
+     * KHU VỰC CÀI ĐẶT ẢNH VÀ NHẠC
+     * Bạn chỉ cần thay đổi các đường dẫn ở đây:
+     */
     const CONFIG = {
-        musicFile: 'Có Em Đời Bỗng Vui - Chillies (Official Video) - YouTube.mp3',
-        couplePhoto: 'Xoá_vùng_ở_202604030150.png' 
+        // 1. Ảnh nền (Phía sau cuốn sổ)
+        backgroundImg: 'Xoá_vùng_ở_202604030150.png', 
+        
+        // 2. Ảnh cặp đôi (Bên trong cuốn sổ)
+        couplePhoto: 'image_6248fb.jpg',
+        
+        // 3. Tệp nhạc nền
+        musicFile: 'Có Em Đời Bỗng Vui - Chillies (Official Video) - YouTube.mp3'
     };
+
+    // Áp dụng ảnh nền vào CSS
+    document.documentElement.style.setProperty('--bg-url', `url('${CONFIG.backgroundImg}')`);
 </script>
 
 <button id="toggle-music" onclick="toggleMusic()">🔇</button>
@@ -250,12 +266,12 @@
             maxWidth: 400,
             minHeight: 400,
             maxHeight: 600,
-            maxShadowOpacity: 0.5,  // TĂNG TỐI ĐA BÓNG ĐỔ: Tạo nếp gấp sâu ở mép giấy khi vén
+            maxShadowOpacity: 0.8,  // Cân bằng lại độ bóng để nhìn trang giấy uốn cong tự nhiên hơn
             showCover: true,
             mobileScrollSupport: true,
             usePortrait: true,
-            flippingTime: 1800,      // LÀM CHẬM: Giúp nhìn rõ quá trình tờ giấy uốn cong dần vào trong
-            drawShadow: true,       // Bật vẽ bóng đổ động theo nếp gấp
+            flippingTime: 1800,
+            drawShadow: true,
             startPage: 0
         });
 
